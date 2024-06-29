@@ -1,9 +1,9 @@
-import { GRID } from '@constant/index';
-import { itemTypes } from '@type/index';
 import React, { DetailedHTMLProps, HTMLAttributes } from 'react';
+import { GRID } from '@constant/index';
+import type { itemTypes } from '@type/index';
 import { Draggable, DraggingStyle, NotDraggingStyle } from 'react-beautiful-dnd';
 
-interface AtomProps {
+export interface AtomProps {
   item: itemTypes;
   index: number;
 }
