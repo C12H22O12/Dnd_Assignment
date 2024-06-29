@@ -33,4 +33,20 @@ module.exports = {
   devServer: {
     port: 3000,
   },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@constant': path.resolve(__dirname, './src/constant'),
+      '@component': path.resolve(__dirname, './src/component'),
+      '@container': path.resolve(__dirname, './src/container'),
+      '@api': path.resolve(__dirname, './src/api'),
+      '@hooks': path.resolve(__dirname, './src/hooks'),
+      '@store': path.resolve(__dirname, './src/store'),
+      '@util': path.resolve(__dirname, './src/util'),
+      '@layout': path.resolve(__dirname, './src/layout'),
+      '@type': path.resolve(__dirname, './src/type'),
+    },
+  },
 };
