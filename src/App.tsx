@@ -3,8 +3,9 @@ import { useCallback, useState } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { dataTypes } from './type';
 import { getData } from './util';
-import DroppableLayout from '@layout/Droppable';
+import DroppableLayout from '@layout/Droppable1';
 import { reorder } from '@util/order';
+import Column from '@component/column';
 
 function App() {
   const data = getData();
@@ -14,6 +15,7 @@ function App() {
   const onDragEnd = useCallback(
     (result: DropResult) => {
       const { type, destination, source } = result;
+      console.log(source, destination);
 
       if (!destination) {
         return;
@@ -28,10 +30,17 @@ function App() {
 
       switch (type) {
         case 'order':
-          const newItems = reorder(orders, startIndex, endIndex);
-          setOrders(newItems);
+          const reordered = reorder(orders, startIndex, endIndex);
+          setOrders(reordered);
           return;
-        case 'vertical':
+        case 'list':
+          const cols = Number(startId.split('_').at(-1));
+          setLists((prev) => {
+            let tmp = { ...prev };
+            tmp[cols] = reorder(list[cols], startIndex, endIndex);
+            console.log(prev);
+            return tmp;
+          });
           return;
       }
     },
@@ -40,7 +49,7 @@ function App() {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <DroppableLayout type={'order'} direction={'horizontal'} items={orders} />
+      <DroppableLayout type={'order'} direction={'horizontal'} items={orders} isCombineEnabled={true} list={list} />
     </DragDropContext>
   );
 }

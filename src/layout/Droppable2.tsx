@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { PropsWithChildren, ReactElement, ReactNode, cloneElement } from 'react';
 import { GRID } from '@constant/index';
 import { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { Direction, Draggable, DraggingStyle, Droppable, NotDraggingStyle } from 'react-beautiful-dnd';
@@ -7,18 +7,21 @@ import { itemTypes } from '@type/index';
 interface DroppableLayoutProps {
   type: 'order' | 'list';
   direction: Direction;
-  items: string[] | itemTypes[];
+  items: itemTypes[];
   isCombineEnabled?: boolean;
-  body: ReactNode;
+  col: string;
   [key: string]: any;
 }
 
-function DroppableLayout({ type, items, direction, body, isCombineEnabled, ...rest }: DroppableLayoutProps) {
-  const itemId = (item: string | itemTypes, index: number): string =>
-    typeof item === 'string' ? `${type}_${index}` : `${type}_${item.id}`;
-
+function DroppableLayout({ type, items, direction, isCombineEnabled, col, ...rest }: DroppableLayoutProps) {
+  console.log(col);
   return (
-    <Droppable type={type} droppableId={`droppable_${type}`} direction={direction} isCombineEnabled={isCombineEnabled}>
+    <Droppable
+      type={type}
+      droppableId={`droppable_${type}_${col}`}
+      direction={direction}
+      isCombineEnabled={isCombineEnabled}
+    >
       {(provided, snapshot) => (
         <div
           {...provided.droppableProps}
@@ -27,7 +30,7 @@ function DroppableLayout({ type, items, direction, body, isCombineEnabled, ...re
         >
           {items.map((item, index) => {
             return (
-              <Draggable key={itemId(item, index)} draggableId={itemId(item, index)} index={index}>
+              <Draggable key={item.id} draggableId={item.id} index={index}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
@@ -40,7 +43,7 @@ function DroppableLayout({ type, items, direction, body, isCombineEnabled, ...re
                       >
                     }
                   >
-                    {body}
+                    {item.content}
                   </div>
                 )}
               </Draggable>
