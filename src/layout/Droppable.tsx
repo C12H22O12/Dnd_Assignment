@@ -4,13 +4,14 @@ import { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { Direction, Draggable, DraggingStyle, Droppable, NotDraggingStyle } from 'react-beautiful-dnd';
 
 interface DroppableLayoutProps {
+  type: 'order' | 'list';
   direction: Direction;
   items: any[];
 }
 
-function DroppableLayout({ items, direction }: DroppableLayoutProps) {
+function DroppableLayout({ type, items, direction }: DroppableLayoutProps) {
   return (
-    <Droppable droppableId={`droppable_${direction}`} direction={direction}>
+    <Droppable type={type} droppableId={`droppable_${direction}`} direction={direction}>
       {(provided, snapshot) => (
         <div
           {...provided.droppableProps}
@@ -18,7 +19,7 @@ function DroppableLayout({ items, direction }: DroppableLayoutProps) {
           style={getListStyle(snapshot.isDraggingOver, direction)}
         >
           {items.map((item, index) => (
-            <Draggable key={item.id} draggableId={item.id} index={index}>
+            <Draggable key={index} draggableId={`${index}`} index={index}>
               {(provided, snapshot) => (
                 <div
                   ref={provided.innerRef}
@@ -31,7 +32,7 @@ function DroppableLayout({ items, direction }: DroppableLayoutProps) {
                     >
                   }
                 >
-                  {item.content}
+                  {item}
                 </div>
               )}
             </Draggable>

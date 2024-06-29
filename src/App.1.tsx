@@ -4,36 +4,24 @@ import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { dataTypes } from './type';
 import { getData } from './util';
 import DroppableLayout from '@layout/Droppable';
-import { reorder } from '@util/order';
 
-function App() {
+export function App() {
   const data = getData();
   const [list, setLists] = useState<dataTypes>(data);
   const [orders, setOrders] = useState<string[]>(Object.keys(data));
 
   const onDragEnd = useCallback(
     (result: DropResult) => {
-      const { type, destination, source } = result;
+      const { type } = result;
 
-      if (!destination) {
-        return;
-      }
+      console.log(type);
 
-      const { index: startIndex, droppableId: startId } = source;
-      const { index: endIndex, droppableId: endId } = destination;
+      // if (!result.destination) {
+      //   return;
+      // }
+      const newItems = reorder(columns, result.source.index, result.destination.index);
 
-      if (startIndex === endIndex && startId === endId) {
-        return;
-      }
-
-      switch (type) {
-        case 'order':
-          const newItems = reorder(orders, startIndex, endIndex);
-          setOrders(newItems);
-          return;
-        case 'vertical':
-          return;
-      }
+      setColumns(newItems);
     },
     [orders, list],
   );
@@ -44,5 +32,3 @@ function App() {
     </DragDropContext>
   );
 }
-
-export default App;
