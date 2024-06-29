@@ -1,22 +1,11 @@
-import React, { DetailedHTMLProps, HTMLAttributes } from 'react';
-import { useCallback, useState } from 'react';
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  DraggingStyle,
-  NotDraggingStyle,
-  DropResult,
-} from 'react-beautiful-dnd';
-import { itemTypes } from './type';
+import React, { useCallback, useState } from 'react';
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
+import type { itemTypes } from '@type/index';
+import { getItems } from '@util/index';
+import { GRID } from '@constant/index';
+import Atom from '@component/atom';
 
 function App() {
-  const getItems = (count: number): itemTypes[] =>
-    Array.from({ length: count }, (_, k) => k).map((k) => ({
-      id: `item-${k}`,
-      content: `item ${k}`,
-    }));
-
   const [items, setItems] = useState<itemTypes[]>(getItems(10));
 
   const reorder = (list: itemTypes[], startIndex: number, endIndex: number) => {
@@ -36,7 +25,7 @@ function App() {
 
       setItems(newItems);
     },
-    [items]
+    [items],
   );
 
   return (
@@ -45,23 +34,7 @@ function App() {
         {(provided, snapshot) => (
           <div {...provided.droppableProps} ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
             {items.map((item, index) => (
-              <Draggable key={item.id} draggableId={item.id} index={index}>
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    style={
-                      getItemStyle(snapshot.isDragging, provided.draggableProps.style) as DetailedHTMLProps<
-                        HTMLAttributes<HTMLDivElement>,
-                        HTMLDivElement
-                      >
-                    }
-                  >
-                    {item.content}
-                  </div>
-                )}
-              </Draggable>
+              <Atom item={item} index={index} />
             ))}
             {provided.placeholder}
           </div>
@@ -70,16 +43,6 @@ function App() {
     </DragDropContext>
   );
 }
-
-const GRID = 8;
-
-const getItemStyle = (isDragging: boolean, draggableStyle?: DraggingStyle | NotDraggingStyle) => ({
-  userSelect: 'none',
-  padding: GRID * 2,
-  margin: `0 0 ${GRID}px 0`,
-  background: isDragging ? 'lightgreen' : 'grey',
-  ...draggableStyle,
-});
 
 const getListStyle = (isDraggingOver: boolean) => ({
   background: isDraggingOver ? 'lightblue' : 'lightgrey',
