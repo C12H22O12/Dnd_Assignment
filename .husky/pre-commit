@@ -1,5 +1,0 @@
-echo 'Hello World, woof!'
-echo 'run eslint command > npm run lint'
-npx lint-staged
-npx stylelint "**/globalStyles.ts" --fix
-npx stylelint "**/*.style.tsx" --fix
