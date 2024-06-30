@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { useCallback, useState } from 'react';
-import { DragDropContext, DragUpdate, DropResult, ResponderProvided } from 'react-beautiful-dnd';
+import { DragDropContext, DragUpdate, Draggable, DropResult, Droppable, ResponderProvided } from 'react-beautiful-dnd';
 import { dataTypes } from './type';
 import { getData } from './util';
-import DroppableLayout from '@layout/Droppable1';
 import { reorder } from '@util/order';
+import { getItemStyle, getListStyle } from '@util/style';
+import Column from '@component/Column';
 
 function App() {
   const data = getData();
@@ -14,16 +15,24 @@ function App() {
 
   const onDragUpdate = useCallback((update: DragUpdate) => {
     setInvaild('null');
-    const { draggableId: startId, destination } = update;
+    const { draggableId: startId, destination, type } = update;
 
-    if (!destination) {
+    if (!destination || type === 'list') {
       return;
     }
 
     const startIndex = Number(startId.split('_').at(-1));
     const endIndex = destination.index;
 
-    if ((startIndex === 0 && endIndex === 2) || (startIndex % 2 && !(endIndex % 2))) {
+    console.log(
+      startIndex,
+      endIndex,
+      endIndex + 1,
+      startIndex === 0 && endIndex === 2,
+      startIndex % 2 && (endIndex + 1) % 2,
+    );
+
+    if ((startIndex === 0 && endIndex === 2) || (startIndex % 2 === 1 && (endIndex + 1) % 2 === 1)) {
       setInvaild(startId);
       return;
     }
@@ -71,14 +80,37 @@ function App() {
 
   return (
     <DragDropContext onDragUpdate={onDragUpdate} onDragEnd={onDragEnd}>
-      <DroppableLayout
-        type={'order'}
-        direction={'horizontal'}
-        items={orders}
-        isCombineEnabled={true}
-        invaild={invaild}
-        list={list}
-      />
+      <Droppable type={'order'} droppableId={`droppable_order`} direction={'horizontal'} isCombineEnabled={true}>
+        {(provided, snapshot) => (
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            style={getListStyle(snapshot.isDraggingOver, 'horizontal')}
+          >
+            {orders.map((item, index) => (
+              <Draggable key={`order_${index}`} draggableId={`order_${index}`} index={index}>
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    style={
+                      getItemStyle(
+                        snapshot.isDragging,
+                        provided.draggableProps.style,
+                        invaild === `order_${index}`,
+                      ) as DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+                    }
+                  >
+                    <Column item={item} items={list[index + 1]} />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
     </DragDropContext>
   );
 }
