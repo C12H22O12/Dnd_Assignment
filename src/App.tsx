@@ -51,7 +51,5 @@ function App() {
     <DragDropContext onDragEnd={onDragEnd}>
       <DroppableLayout type={'order'} direction={'horizontal'} items={orders} isCombineEnabled={true} list={list} />
     </DragDropContext>
-  );
-}
 
 export default App;
