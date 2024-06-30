@@ -1,6 +1,6 @@
 import React, { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { useCallback, useState } from 'react';
-import { DragDropContext, DragUpdate, Draggable, DropResult, Droppable, ResponderProvided } from 'react-beautiful-dnd';
+import { DragDropContext, DragUpdate, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 import { dataTypes } from './type';
 import { getData } from './util';
 import { reorder } from '@util/order';
@@ -23,14 +23,6 @@ function App() {
 
     const startIndex = Number(startId.split('_').at(-1));
     const endIndex = destination.index;
-
-    console.log(
-      startIndex,
-      endIndex,
-      endIndex + 1,
-      startIndex === 0 && endIndex === 2,
-      startIndex % 2 && (endIndex + 1) % 2,
-    );
 
     if ((startIndex === 0 && endIndex === 2) || (startIndex % 2 === 1 && (endIndex + 1) % 2 === 1)) {
       setInvaild(startId);
