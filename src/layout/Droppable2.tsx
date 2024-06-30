@@ -14,7 +14,6 @@ interface DroppableLayoutProps {
 }
 
 function DroppableLayout({ type, items, direction, isCombineEnabled, col, ...rest }: DroppableLayoutProps) {
-  console.log(col);
   return (
     <Droppable
       type={type}

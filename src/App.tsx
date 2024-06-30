@@ -27,6 +27,12 @@ function App() {
         return;
       }
 
+      // 제약 조건 반영 
+      // 1 - 첫 번째 칼럼에서 세 번째 칼럼으로는 아이템 이동이 불가능해야 합니다.
+      if (startIndex === 0 && endIndex === 2) {
+        return;
+      }
+
       switch (type) {
         case 'order':
           const reordered = reorder(orders, startIndex, endIndex);
