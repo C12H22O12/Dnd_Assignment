@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCallback, useState } from 'react';
-import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, DragUpdate, DropResult, ResponderProvided } from 'react-beautiful-dnd';
 import { dataTypes } from './type';
 import { getData } from './util';
 import DroppableLayout from '@layout/Droppable1';
@@ -10,6 +10,24 @@ function App() {
   const data = getData();
   const [list, setLists] = useState<dataTypes>(data);
   const [orders, setOrders] = useState<string[]>(Object.keys(data));
+  const [invaild, setInvaild] = useState<string>('');
+
+  const onDragUpdate = useCallback((update: DragUpdate) => {
+    setInvaild('null');
+    const { draggableId: startId, destination } = update;
+
+    if (!destination) {
+      return;
+    }
+
+    const startIndex = Number(startId.split('_').at(-1));
+    const endIndex = destination.index;
+
+    if ((startIndex === 0 && endIndex === 2) || (startIndex % 2 && !(endIndex % 2))) {
+      setInvaild(startId);
+      return;
+    }
+  }, []);
 
   const onDragEnd = useCallback(
     (result: DropResult) => {
@@ -43,7 +61,6 @@ function App() {
           setLists((prev) => {
             let tmp = { ...prev };
             tmp[cols] = reorder(list[cols], startIndex, endIndex);
-            console.log(prev);
             return tmp;
           });
           return;
@@ -53,8 +70,15 @@ function App() {
   );
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <DroppableLayout type={'order'} direction={'horizontal'} items={orders} isCombineEnabled={true} list={list} />
+    <DragDropContext onDragUpdate={onDragUpdate} onDragEnd={onDragEnd}>
+      <DroppableLayout
+        type={'order'}
+        direction={'horizontal'}
+        items={orders}
+        isCombineEnabled={true}
+        invaild={invaild}
+        list={list}
+      />
     </DragDropContext>
   );
 }
