@@ -1,9 +1,9 @@
-import React, { PropsWithChildren, ReactElement, ReactNode, cloneElement } from 'react';
+import React from 'react';
 import { GRID } from '@constant/index';
 import { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { Direction, Draggable, DraggingStyle, Droppable, NotDraggingStyle } from 'react-beautiful-dnd';
 import { itemTypes } from '@type/index';
-import Column from '@component/column';
+import Column from '@component/Column';
 
 interface DroppableLayoutProps {
   type: 'order' | 'list';

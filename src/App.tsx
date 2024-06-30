@@ -5,7 +5,6 @@ import { dataTypes } from './type';
 import { getData } from './util';
 import DroppableLayout from '@layout/Droppable1';
 import { reorder } from '@util/order';
-import Column from '@component/column';
 
 function App() {
   const data = getData();
@@ -51,5 +50,7 @@ function App() {
     <DragDropContext onDragEnd={onDragEnd}>
       <DroppableLayout type={'order'} direction={'horizontal'} items={orders} isCombineEnabled={true} list={list} />
     </DragDropContext>
+  );
+}
 
 export default App;

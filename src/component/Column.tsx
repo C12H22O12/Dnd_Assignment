@@ -1,7 +1,7 @@
 import React from 'react';
 import DroppableLayout from '@layout/Droppable2';
 import { PropsWithChildren } from 'react';
-import { dataTypes, itemTypes } from '@type/index';
+import { itemTypes } from '@type/index';
 
 interface ColumnProps extends PropsWithChildren {
   items: itemTypes[];
@@ -9,7 +9,6 @@ interface ColumnProps extends PropsWithChildren {
 }
 
 function Column({ items, item }: ColumnProps) {
-  console.log(item);
   return (
     <>
       Column {item}
