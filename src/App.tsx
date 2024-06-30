@@ -2,15 +2,15 @@ import React, { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { useCallback, useState } from 'react';
 import { DragDropContext, DragUpdate, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 import { dataTypes } from './type';
-import { getData } from './util';
+import { getData } from './util/data';
 import { reorder } from '@util/order';
 import { getItemStyle, getListStyle } from '@util/style';
 import Column from '@component/Column';
 
 function App() {
   const data = getData();
-  const [list, setLists] = useState<dataTypes>(data);
-  const [orders, setOrders] = useState<string[]>(Object.keys(data));
+  const [list, setLists] = useState<dataTypes>(data); // key값으로 column의 값을 가지고, value로 각 리스트 아이템을 가지는 state
+  const [orders, setOrders] = useState<string[]>(Object.keys(data)); // column의 값을 가지는 state
   const [invaild, setInvaild] = useState<string>('');
 
   const onDragUpdate = useCallback((update: DragUpdate) => {
@@ -32,9 +32,9 @@ function App() {
 
   const onDragEnd = useCallback(
     (result: DropResult) => {
-      const { type, destination, source } = result;
+      const { type, destination, source, reason } = result;
 
-      if (!destination) {
+      if (!destination || reason === 'CANCEL') {
         return;
       }
 
