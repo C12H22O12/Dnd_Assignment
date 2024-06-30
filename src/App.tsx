@@ -1,9 +1,9 @@
 import React from 'react';
 import { useCallback, useState } from 'react';
-import { DragDropContext, DragUpdate, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, DragUpdate, DropResult, ResponderProvided } from 'react-beautiful-dnd';
 import { dataTypes } from './type';
 import { getData } from './util';
-import DroppableLayout from '@layout/Droppable';
+import DroppableLayout from '@layout/Droppable1';
 import { reorder } from '@util/order';
 
 function App() {
