@@ -14,7 +14,6 @@ function App() {
   const onDragEnd = useCallback(
     (result: DropResult) => {
       const { type, destination, source } = result;
-      console.log(source, destination);
 
       if (!destination) {
         return;
@@ -27,9 +26,10 @@ function App() {
         return;
       }
 
-      // 제약 조건 반영 
+      // 제약 조건 반영
       // 1 - 첫 번째 칼럼에서 세 번째 칼럼으로는 아이템 이동이 불가능해야 합니다.
-      if (startIndex === 0 && endIndex === 2) {
+      // 2 - 짝수 아이템은 다른 짝수 아이템 앞으로 이동할 수 없습니다.
+      if ((startIndex === 0 && endIndex === 2) || (startIndex % 2 && !(endIndex % 2))) {
         return;
       }
 
