@@ -3,6 +3,7 @@ import { PropsWithChildren } from 'react';
 import { itemTypes } from '@type/index';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { getItemStyle, getListStyle } from '@util/style';
+import { GRID } from '@constant/index';
 
 interface ColumnProps extends PropsWithChildren {
   items: itemTypes[];
@@ -12,7 +13,9 @@ interface ColumnProps extends PropsWithChildren {
 function Column({ items, item }: ColumnProps) {
   return (
     <>
-      Column {item}
+      <div style={{ width: 100, marginBottom: GRID, color: '#e1d9cf', textAlign: 'center', fontWeight: 'bolder' }}>
+        Column {item}
+      </div>
       <Droppable type={'list'} droppableId={`droppable_list_${item}`} direction={'vertical'} isCombineEnabled={true}>
         {(provided, snapshot) => (
           <div
